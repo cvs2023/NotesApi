@@ -1,0 +1,1 @@
+const noteModel = require("../schema/notesSchema");
