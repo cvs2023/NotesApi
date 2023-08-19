@@ -1,18 +1,19 @@
 const express = require("express");
-const notesRoute = express.Router();
+const { getNotes, createNote, deleteNote, updateNote } = require("../controllers/noteController");
+const auth = require("../middlewares/auth");
+const noteRouter = express.Router();
+
+noteRouter.get("/", auth , getNotes)
+noteRouter.post("/", auth , createNote)
+noteRouter.put("/:id", auth , updateNote)
+noteRouter.delete("/:id", auth , deleteNote)
 
 
-notesRoute.get("/",(req,res)=>{
-    res.send("res ms dhjg");
-})
-notesRoute.get("/data",(req,res)=>{
-    res.status(200).json(data);
-})
-notesRoute.get("/random",(req,res)=>{
+noteRouter.post("/random",(req,res)=>{
     const random = Math.floor(Math.random() * data.length)
     const index = data[random]
     res.status(200).json(index);
 })
 
 
-module.exports = notesRoute;
+module.exports = noteRouter;

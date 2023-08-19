@@ -15,13 +15,7 @@ mongoose.connect("mongodb+srv://admin:1hjwHTmgIf3cmmJK@cluster0.1vevs3w.mongodb.
     console.log(er);
 } )
 
-
-
-app.use(( req,res,next)=>{
-    console.log(req.method , " url - " , req.url);
-    next();
-})
-app.use(express.json());//req body ko ati hai json mai krta hia ,parse into json
+app.use(express.json());
 
 app.use("/notes", notesRoute)
 app.use("/users", users)
