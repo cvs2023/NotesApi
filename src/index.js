@@ -1,22 +1,30 @@
 const express = require("express");
 const app = express();
-const data = require("./dummyData");
 const notesRoute = require("./routes/notesRoutes");
 const users = require("./routes/usersRoutes");
+const dotenv = require("dotenv");
+const cors = require("cors");
+
+const PORT = process.env.PORT || 6000
+
+dotenv.config();
 
 const mongoose = require("mongoose");
-mongoose.connect("mongodb+srv://admin:1hjwHTmgIf3cmmJK@cluster0.1vevs3w.mongodb.net/")
+
+app.use(cors());
+app.use(express.json());
+app.use("/notes", notesRoute)
+app.use("/users", users)    
+
+mongoose.connect( process.env.MONGO_URI,{
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
 .then(()=>{
-    app.listen(5000,()=>{
-        console.log("server started")
+    app.listen(PORT,()=>{
+        console.log("Server started at port no : " + PORT );
     })
 })
-.catch((er  )=>{
-    console.log(er);
-} )
-
-app.use(express.json());
-
-app.use("/notes", notesRoute)
-app.use("/users", users)
-
+.catch((error)=>{
+    console.error(error);
+})

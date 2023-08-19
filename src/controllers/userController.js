@@ -1,7 +1,7 @@
 const userModel = require("../schema/userSchema")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
-const SECRET_KEY = "NOTESAPI"
+const SECRET_KEY = process.env.SECRET_KEY
 
 const getUsers =async ( req,res)=>{
     res.status(200).json("message"); 
@@ -18,7 +18,7 @@ const signUp  = async (req,res)=>{
         const existingUser = await userModel.findOne({email:email});
 
         if(existingUser){
-            return res.send(404).json({message:"User already exists"})
+            return res.status(404).json({message:"User already exists"})
         }
 
         const hashedPassword = await bcrypt.hash(password,10);
@@ -30,10 +30,10 @@ const signUp  = async (req,res)=>{
         })
         const token = jwt.sign({email:result.email,id:result._id},SECRET_KEY)
 
-        return res.status(201).json({user:result,token:token})
+        res.status(200).json({user:result,token:token})
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({message:"Something went wrong "})
+        console.error(error);
+         res.status(500).json({message:"Something went wrong "})
     }
 }
 const signIn  = async (req,res)=>{
@@ -52,7 +52,7 @@ const signIn  = async (req,res)=>{
     }
     const token = jwt.sign({email:existingUser.email,id:existingUser._id},SECRET_KEY)
     console.log("sign In");
-    return res.status(201).json({user:existingUser,token:token})
+    res.status(201).json({user:existingUser,token:token})
 
 }
 
